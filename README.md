@@ -21,6 +21,7 @@ Only multispectral imagery (5 bands) is supported at this time. In addition, onl
 **step4** Change the working directory to the clone directory by typing ```cd "WEDIF" ```
 
 **step5** Type the following
+
 ```!pip install -r requirements.txt```
 
 ```import os``` 
@@ -29,7 +30,7 @@ Only multispectral imagery (5 bands) is supported at this time. In addition, onl
 
 **Start using the package**
 
-**Step 1**
+**step 1**
 
 **detect the weeds and store in a variable**
 
@@ -44,7 +45,7 @@ seg_obj_threshold: Any objects with area less than seg_obj_threshold value will 
 
 0.88 & 100 are the arbitrary threshold I used for example. You may want to test the script with different values and visualize the results to evaluate (shown below).
 
-**Step 2**
+**step 2**
 
 **visulaize the results**
 
@@ -52,7 +53,7 @@ seg_obj_threshold: Any objects with area less than seg_obj_threshold value will 
 e.g. ```wedif.plot_results(results, True, False)```
 This script will overlay the detected weed boundaries over the layer that you specify. Here, in the example above, RGB layer was chosen for the base layer for results overlay.
 
-**Step 3**
+**step 3**
 
 **export the GPS coordinates**
 Once you are satisfied with the detection results after a few rounds of trial and error with the values, you can export the coordinates
