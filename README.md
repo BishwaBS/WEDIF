@@ -21,6 +21,7 @@ Only multispectral imagery (5 bands) is supported at this time. In addition, onl
 **step4** Change the working directory to the clone directory by typing ```cd "WEDIF" ```
 
 **step5** Type the following
+```!pip install -r requirements.txt```
 
 ```import os``` 
 
