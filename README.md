@@ -35,7 +35,12 @@ Only multispectral imagery (5 bands) is supported at this time. In addition, onl
 ```detect_weeds( image, num_bands, target_layer,  target_layer_threshold, seg_obj_area_threshold,  ROIshapefile=None)```
 e.g. ```results=wedif.detect_weeds("path/to/imagery", 5,  "NDVI", 0.88, 100, "path/to/shapefile_for_ROI")```
 
-You can choose either NDVI or NDRE depending on your use case. If you have a shapefile for your ROI, you can use as shown above. If you don't need to clip the area, you don't have to provide any value to this argument
+You can choose either NDVI or NDRE depending on your use case. If you have a shapefile for your ROI, you can use as shown above. If you don't need to clip the area, you don't have to provide any value to this argument.
+
+target_layer_threshold: Any objects with values less than target_layer_threshold value will be ignore or removed.
+
+seg_obj_threshold: Any objects with area less than seg_obj_threshold value will be ignore or removed.
+
 0.88 & 100 are the arbitrary threshold I used for example. You may want to test the script with different values and visualize the results to evaluate (shown below).
 
 **Step 2**
