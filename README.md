@@ -1,9 +1,11 @@
 This package can be used to detect weed escapes in fallow lands and acquire the GPS coordinates for those detected weeds. User can clip the imagery using shapefiles for their ROI. Users can also choose to view the results as well.
 
 **Requirements**
+
 Users would need to provide multispectral imagery (5 bands) for this package to run
 
 **Limitations:**
+
 Only multispectral imagery (5 bands) is supported at this time. In addition, only NDVI & NDRE are avaiable for user to choose for the layers.
 
 **How to use:**
