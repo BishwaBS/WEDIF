@@ -1,5 +1,7 @@
 This package can be used to detect weed escapes in fallow lands and acquire the GPS coordinates for those detected weeds. User can clip the imagery using shapefiles for their ROI. Users can also choose to view the results as well.
 
+This package utilizes advanced computer vision technqiues such as object segmentation and countour processing for segmenting the weed boundary in the digital images.
+
 **Requirements**
 
 Users would need to provide multispectral imagery (5 bands) for this package to run
