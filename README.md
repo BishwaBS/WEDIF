@@ -31,17 +31,22 @@ Only multispectral imagery (5 bands) is supported at this time. In addition, onl
 **Step 1**
 
 **detect the weeds and store in a variable**
+
 ```detect_weeds( image, num_bands, target_layer,  target_layer_threshold, seg_obj_area_threshold,  ROIshapefile=None)```
 e.g. ```results=wedif.detect_weeds("path/to/imagery", 5,  "NDVI", 0.88, 100, "path/to/shapefile_for_ROI")```
 
 You can choose either NDVI or NDRE depending on your use case. If you have a shapefile for your ROI, you can use as shown above. If you don't need to clip the area, you don't have to provide any value to this argument
 0.88 & 100 are the arbitrary threshold I used for example. You may want to test the script with different values and visualize the results to evaluate (shown below).
 
+**Step 2**
+
 **visulaize the results**
+
 ```wedif.plot_results(results, plot_over_rgb=False, plot_over_targt_layer=False)```
 e.g. ```wedif.plot_results(results, True, False)```
 This script will overlay the detected weed boundaries over the layer that you specify. Here, in the example above, RGB layer was chosen for the base layer for results overlay.
 
+**Step 3**
 
 **export the GPS coordinates**
 Once you are satisfied with the detection results after a few rounds of trial and error with the values, you can export the coordinates
