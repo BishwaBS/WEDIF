@@ -4,7 +4,7 @@ This package utilizes advanced computer vision technqiues such as object segment
 
 **Requirements**
 
-Users would need to provide multispectral imagery (5 bands) for this package to run
+The package currently supports only five-band multispectral imagery.
 
 **Limitations:**
 
