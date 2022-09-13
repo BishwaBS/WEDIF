@@ -66,3 +66,6 @@ Once you are satisfied with the detection results after a few rounds of trial an
 e.g. ```wedif.export_shapefile(results, "path/to/outputfilename.shp")
 
 Yay!! you just detected weeds and exported the GPS coordinates without proprietary softwares. Enjoy the package!
+
+**Example**
+![image](https://user-images.githubusercontent.com/32180486/190028713-570ca01a-c667-4ce2-9c5e-537f364433d9.png)
