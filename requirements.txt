@@ -1,3 +1,4 @@
 rasterio
 shapely
 fiona
+opencv-python
