@@ -25,42 +25,38 @@ def detect_weeds( image, num_bands, target_layer,  target_layer_threshold, seg_o
     raster=rasterio.open(os.path.join(os.getcwd(), image))
     print("raster loaded")
 
-    ##Croping the area using the shapefile for the area of interest if needed. This code runs only when crop=TRUE is set in function above.
-
     bt=raster.transform
     crs=raster.crs
 
-
-
+    ##Croping the area using the shapefile for the area of interest if needed. This code runs only when ROIshapefile arg set in function above.
     if ROIshapefile:
         with fiona.open(os.path.join(os.getcwd(), ROIshapefile), "r") as shapefile:
             shapes = [feature["geometry"] for feature in shapefile]
         rast, bt = rasterio.mask.mask(raster, shapes=shapes, crop=True)
         print("area clipped")
 
+    ## Reading the whole raster when cropping is not required
     if num_bands==5:
         if not ROIshapefile:
             rast1=raster.read()
         else:
             rast1=rast
 
-        ##Reading individual bands from the raster we loaded earlier
-        b, g, r, re, nir = rast1[0, :, :], rast1[1, :, :], rast1[2, :, :], rast1[3, :, :], rast1[4, :, :]
+    ##Reading individual bands from the raster we loaded earlier
+    b, g, r, re, nir = rast1[0, :, :], rast1[1, :, :], rast1[2, :, :], rast1[3, :, :], rast1[4, :, :]
         
-
     ##Computing ndri as this index is found to provide meaningful info for this project. You can try other indices and features
     if target_layer=="NDRE":
         target= (re-r)/ (re + r)
     if target_layer == "NDVI":
         target = (nir - r) / (nir + r)
-       ##NDRI computed above may not be tuned. Stretching the histogram to add contrast in ndri
+        
+   ##NDRI computed above may not be tuned. Stretching the histogram to add contrast in ndri
     target=adjust_band(target)
     target=target.astype("double")
     p2 = np.percentile(target, 2)
     p98 = np.percentile(target, 98)
     target = exposure.rescale_intensity(target, in_range=(p2, p98))
-
-
 
     print("starting segmentation process..........")
     segments = quickshift(target, kernel_size=7, max_dist=7, ratio=0.8, convert2lab=False)
@@ -76,7 +72,7 @@ def detect_weeds( image, num_bands, target_layer,  target_layer_threshold, seg_o
     ###creating an empty array to draw all the contours
     empty_arr = np.zeros(segments.shape)
 
-    ###Iterating over each segments generated earlier and drawing on empty_arr
+    ###Iterating over each segments generated earlier and drawing segments on empty_arr when met criteria
     cont_selected=[]
     for (i, segVal) in enumerate(np.unique(segments)):
         mask = np.zeros(segments.shape, dtype="uint8")
@@ -105,15 +101,14 @@ def detect_weeds( image, num_bands, target_layer,  target_layer_threshold, seg_o
     return empty_arr, bt, crs, b,g,r, target, cont_selected 
     #####################################################################
 
-
-
+#function to generate shapefiles for the segments drawn in the empty array
 def export_shapefile(results, outputfilename):
     array, bt, crs, b,g,r, target, cont=results
 
     geometries = rasterio.features.shapes(array.astype("uint8"), transform=bt)
     polygon_bounds = []
     polygon_bounds = [geom[0]['coordinates'] for geom in geometries if "Polygon" in geom[0]["type"]]
-    print(polygon_bounds)
+#     print(polygon_bounds)
 
     schema = {'geometry': 'Point', 'properties': {'name': 'str'}}
     with collection(os.path.join(os.getcwd(), outputfilename), "w", "ESRI Shapefile", schema, crs=crs) as output:
@@ -126,7 +121,7 @@ def export_shapefile(results, outputfilename):
                 ids += 1
         print("coordinates exported and shapefile saved in directory")
 
-
+#function to visualize shapefiles over various layers
 def plot_results(results, plot_over_rgb=False, plot_over_targt_layer=False):
     cont=results[7]
     b,g,r = results[3], results[4], results[5]
