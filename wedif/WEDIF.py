@@ -18,8 +18,25 @@ from fiona.crs import from_epsg
 import cv2
 import matplotlib.pyplot as plt
 
+#function to detect weeds in multi-band raster
 
-def detect_weeds( image, num_bands, target_layer,  target_layer_threshold, seg_obj_area_threshold,  ROIshapefile=None):
+#parameters:
+        #image-A 5-band raster with bands B,G,R,RE,NIR
+        #target_layer- NDVI or NDRI layer to be computed out of 5-band raster. User can choose either of the values
+        #target_layer_threshold - Value of the target layer to be used to define weeds
+        #seg_obj_area_threshold - Area of the contour object segemented to be used to define weeds
+        #ROIshapefile- A boolean value (True when clipping is required with shapefile or False otherwise)
+#returns:
+        #empty_arr - Array over which segmented contours would be drawn over
+        #bt - Transformation factor of the rastor
+        #crs - Cooridnate reference system of the rastor
+        #b - Blue band of the raster
+        #g - Green band of the raster
+        #r - Red band of the raster
+        #target - NDVI or NDRI depending upon what was choosen by the user
+        #cont_selected - A list of contours that passed the threshold. In other words, these contours are weed objects. 
+        
+def detect_weeds( image, target_layer,  target_layer_threshold, seg_obj_area_threshold,  ROIshapefile=None):
 
     ## Opening raster from the local directory
     raster=rasterio.open(os.path.join(os.getcwd(), image))
@@ -37,11 +54,10 @@ def detect_weeds( image, num_bands, target_layer,  target_layer_threshold, seg_o
         print("area clipped")
 
     ## Reading the whole raster when cropping is not required
-    if num_bands==5:
-        if not ROIshapefile:
-            rast1=raster.read()
-        else:
-            rast1=rast
+    if not ROIshapefile:
+        rast1=raster.read()
+    else:
+        rast1=rast
 
     ## Reading individual bands from the raster we loaded earlier
     b, g, r, re, nir = rast1[0, :, :], rast1[1, :, :], rast1[2, :, :], rast1[3, :, :], rast1[4, :, :]
