@@ -21,20 +21,20 @@ import matplotlib.pyplot as plt
 #function to detect weeds in multi-band raster
 
 #parameters:
-        #image-A 5-band raster with bands B,G,R,RE,NIR
-        #target_layer- NDVI or NDRI layer to be computed out of 5-band raster. User can choose either of the values
-        #target_layer_threshold - Value of the target layer to be used to define weeds
-        #seg_obj_area_threshold - Area of the contour object segemented to be used to define weeds
+        #image: str- Path for a 5-band raster with bands B,G,R,RE,NIR
+        #target_layer: str- NDVI or NDRI layer to be computed out of 5-band raster. User can choose either of the values
+        #target_layer_thresholD: int- Value of the target layer to be used to define weeds
+        #seg_obj_area_threshold: int- Area of the contour object segemented to be used to define weeds
         #ROIshapefile- A boolean value (True when clipping is required with shapefile or False otherwise)
 #returns:
-        #empty_arr - Array over which segmented contours would be drawn over
-        #bt - Transformation factor of the rastor
-        #crs - Cooridnate reference system of the rastor
-        #b - Blue band of the raster
-        #g - Green band of the raster
-        #r - Red band of the raster
-        #target - NDVI or NDRI depending upon what was choosen by the user
-        #cont_selected - A list of contours that passed the threshold. In other words, these contours are weed objects. 
+        #empty_arr: array- Array over which segmented contours would be drawn over
+        #bt: dict- Transformation factor of the rastor
+        #crs: dict- Cooridnate reference system of the rastor
+        #b: array- Blue band of the raster
+        #g: array- Green band of the raster
+        #r: array- Red band of the raster
+        #target: str- NDVI or NDRI depending upon what was choosen by the user
+        #cont_selected: list - A list of contours that passed the threshold. In other words, these contours are weed objects. 
         
 def detect_weeds( image, target_layer,  target_layer_threshold, seg_obj_area_threshold,  ROIshapefile=None):
 
@@ -117,9 +117,14 @@ def detect_weeds( image, target_layer,  target_layer_threshold, seg_obj_area_thr
     print("drawing completed")
 
     return empty_arr, bt, crs, b,g,r, target, cont_selected 
-    #####################################################################
+
 
 #function to generate shapefiles for the segments drawn in the empty array
+#parameters:    
+            #results: obj- A python object containing output of 'detect-weed' function
+            #outputfilename: str- Path where shapefile should be exported and saved
+#returns:   #Saves shapefile in the path specified    
+
 def export_shapefile(results, outputfilename):
     array, bt, crs, b,g,r, target, cont=results
     
@@ -141,6 +146,13 @@ def export_shapefile(results, outputfilename):
         print("coordinates exported and shapefile saved in directory")
 
 #function to visualize shapefiles over various layers
+#parameters:
+        #results: A python object containing output of 'detect-weed' function
+        #plot_over_rgb: boolean- True if user wants to plot results over original rgb layer
+        #plot_over_target_layer: boolean -True if user wants to plot results over target layer
+#returns: 
+        #matplotlib plot that shows detected weeds overlaid on user-specified base layer
+        
 def plot_results(results, plot_over_rgb=False, plot_over_targt_layer=False):
     cont=results[7]
     b,g,r = results[3], results[4], results[5]
