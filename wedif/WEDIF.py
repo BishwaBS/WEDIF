@@ -64,7 +64,7 @@ def detect_weeds( image, target_layer,  target_layer_threshold, seg_obj_area_thr
         
     ## Computing ndri as this index is found to provide meaningful info for this project. You can try other indices and features
     if target_layer=="NDRE":
-        target= (re-r)/ (re + r)
+        target= (nir-re)/ (nir + re)
     if target_layer == "NDVI":
         target = (nir - r) / (nir + r)
         
