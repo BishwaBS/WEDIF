@@ -118,6 +118,30 @@ def detect_weeds( image, target_layer,  target_layer_threshold, seg_obj_area_thr
 
     return empty_arr, bt, crs, b,g,r, target, cont_selected 
 
+#function to visualize shapefiles over various layers
+#parameters:
+        #results: A python object containing output of 'detect-weed' function
+        #plot_over_rgb: boolean- True if user wants to plot results over original rgb layer
+        #plot_over_target_layer: boolean -True if user wants to plot results over target layer
+#returns: 
+        #matplotlib plot that shows detected weeds overlaid on user-specified base layer
+        
+def plot_results(results, plot_over_rgb=False, plot_over_targt_layer=False):
+    cont=results[7]
+    b,g,r = results[3], results[4], results[5]
+    target =results[6]
+    if plot_over_rgb:
+      layer= np.stack((r,g,b), axis=2)
+      p2 = np.percentile(layer, 4)
+      p98 = np.percentile(layer, 99)
+      layer = exposure.rescale_intensity(layer, in_range=(p2, p98))
+      cv2.drawContours(layer, cont, -1, color=(0, 255, 0), thickness=2)
+    elif plot_over_targt_layer:
+      layer=target
+      cv2.drawContours(layer, cont, -1, color=(0, 55, 0), thickness=2)
+    plt.imshow(layer)
+    plt.show()
+        
 
 #function to generate shapefiles for the segments drawn in the empty array
 #parameters:    
@@ -145,29 +169,7 @@ def export_shapefile(results, outputfilename):
                 ids += 1
         print("coordinates exported and shapefile saved in directory")
 
-#function to visualize shapefiles over various layers
-#parameters:
-        #results: A python object containing output of 'detect-weed' function
-        #plot_over_rgb: boolean- True if user wants to plot results over original rgb layer
-        #plot_over_target_layer: boolean -True if user wants to plot results over target layer
-#returns: 
-        #matplotlib plot that shows detected weeds overlaid on user-specified base layer
-        
-def plot_results(results, plot_over_rgb=False, plot_over_targt_layer=False):
-    cont=results[7]
-    b,g,r = results[3], results[4], results[5]
-    target =results[6]
-    if plot_over_rgb:
-      layer= np.stack((r,g,b), axis=2)
-      p2 = np.percentile(layer, 4)
-      p98 = np.percentile(layer, 99)
-      layer = exposure.rescale_intensity(layer, in_range=(p2, p98))
-      cv2.drawContours(layer, cont, -1, color=(0, 255, 0), thickness=2)
-    elif plot_over_targt_layer:
-      layer=target
-      cv2.drawContours(layer, cont, -1, color=(0, 55, 0), thickness=2)
-    plt.imshow(layer)
-    plt.show()
+
 
 
 
